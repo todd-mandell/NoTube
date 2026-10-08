@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoPanicNews - Cortisol-Spiking Cable News Detox</title>
+    <!-- Tailwind CSS CDN for cable news alarmist typography & dark theme layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        panic: {
+                            red: '#cc0000',
+                            brightRed: '#ff0033',
+                            dark: '#0a0a0a',
+                            card: '#161616',
+                            border: '#2a2a2a',
+                            yellow: '#ffcc00'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Oswald:wght@700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .oswald { font-family: 'Oswald', sans-serif; }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes flashAlarm {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .alarm-flash { animation: flashAlarm 1.2s infinite ease-in-out; }
+
+        .pulse-slow { animation: pulseHeart 1s infinite ease-in-out; }
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col items-center select-none">
+
+    <!-- Top Urgent Breaking News Ticker -->
+    <div class="w-full bg-[#cc0000] text-white py-1.5 px-3 overflow-hidden flex items-center shadow-lg border-b-2 border-yellow-400 z-50">
+        <div class="bg-black text-[#cc0000] px-2 py-0.5 text-xs font-black uppercase tracking-wider mr-2 shrink-0 flex items-center space-x-1 oswald">
+            <span class="alarm-flash">🚨</span> <span>BREAKING PANIC</span>
+        </div>
+        <div class="overflow-hidden flex-1 relative whitespace-nowrap">
+            <div class="animate-ticker text-xs font-bold tracking-wide uppercase">
+                🔴 MARKETS PLUNGE 14,000 POINTS AMID UNPRECEDENTED GLOBAL SUPPLY CRISIS • EXPERTS WARN: "PREPARE FOR IMMEDIATE CATASTROPHE" • YOUR PENSION IS CURRENTLY EVAPORATING • STAY TUNED FOR MORE FEAR-INDUCING UPDATES •
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Cable News Header -->
+    <header class="sticky top-0 z-40 bg-[#121212]/95 backdrop-blur border-b border-[#262626] w-full max-w-md px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#cc0000] to-yellow-500 flex items-center justify-center font-black text-xl shadow-lg oswald">
+                NN
+            </div>
+            <div>
+                <h1 class="font-black text-lg tracking-tight uppercase oswald text-red-500">NoPanic<span class="text-white">NEWS</span></h1>
+                <p class="text-[9px] text-gray-400 font-semibold uppercase tracking-wider">Algorithmic Cortisol Generator</p>
+            </div>
+        </div>
+
+        <!-- Panic Index Meter Header Badge -->
+        <button onclick="triggerEmergencyDetox()" class="bg-red-600/20 border border-red-500/40 text-red-400 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center space-x-1 shadow-lg hover:bg-red-600/30 transition">
+            <span class="pulse-slow">⚡</span>
+            <span>RAGE: <span id="header-rage-bpm">138</span> BPM</span>
+        </button>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="w-full max-w-md flex-1 pb-24 flex flex-col p-3 space-y-4">
+
+        <!-- TAB 1: Live Alarmist News Feed -->
+        <div id="tab-news" class="tab-content flex-1 space-y-4">
+            <!-- Panic Index Dashboard Box -->
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-4 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl oswald">
+                    Live Telemetry
+                </div>
+                <h2 class="font-black text-sm uppercase tracking-wide text-red-400 mb-3 oswald flex items-center space-x-2">
+                    <span>📊</span> <span>Your Real-Time Cortisol Metrics</span>
+                </h2>
+                
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-[#0f0f0f] p-2.5 rounded-xl border border-[#222]">
+                        <p class="text-[10px] text-gray-400 font-semibold">Blood Pressure</p>
+                        <p class="text-lg font-black text-red-500 mt-0.5 oswald" id="stat-bp">158/98</p>
+                    </div>
+                    <div class="bg-[#0f0f0f] p-2.5 rounded-xl border border-[#222]">
+                        <p class="text-[10px] text-gray-400 font-semibold">Adrenaline Spike</p>
+                        <p class="text-lg font-black text-yellow-400 mt-0.5 oswald" id="stat-adrenaline">98.4%</p>
+                    </div>
+                    <div class="bg-[#0f0f0f] p-2.5 rounded-xl border border-[#222]">
+                        <p class="text-[10px] text-gray-400 font-semibold">Dumb Doom Score</p>
+                        <p class="text-lg font-black text-purple-400 mt-0.5 oswald" id="stat-doom">4,280</p>
+                    </div>
+                </div>
+
+                <div class="mt-3 pt-3 border-t border-[#222] flex items-center justify-between">
+                    <span class="text-[11px] text-gray-400">Calculated based on your scrolling panic frequency.</span>
+                    <button onclick="triggerEmergencyDetox()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase px-3 py-1.5 rounded-xl oswald shadow-md transition">
+                        🛑 STOP PANIC
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top Alarmist Featured Story -->
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl overflow-hidden shadow-xl">
+                <div class="bg-gradient-to-r from-red-700 to-red-900 p-4 text-white relative">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] bg-black/50 backdrop-blur px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider oswald">🚨 EXCLUSIVE ALARM</span>
+                        <span class="text-xs font-mono font-bold text-yellow-300">LIVE URGENCY: 99%</span>
+                    </div>
+                    <h3 class="font-black text-xl uppercase leading-tight oswald tracking-tight">
+                        "EVERYTHING YOU LOVE IS IN JEOPARDY": NEW STUDY PROVES NOBODY IS SAFE FROM IMPENDING DISASTER
+                    </h3>
+                </div>
+                <div class="p-4 space-y-3">
+                    <p class="text-xs text-gray-300 leading-relaxed">
+                        Cable news anchors wearing 300-dollar makeup with grave expressions insist that unless you stay glued to this screen for the next 14 hours, civilization as we know it will collapse before sunset.
+                    </p>
+                    <div class="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-[#222]">
+                        <span>Source: Fear Mongering Network</span>
+                        <button onclick="spikeRage()" class="text-red-400 font-bold hover:underline">Inflame Outrage (+5 BPM)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Feed of Panic Headlines -->
+            <div class="space-y-3" id="panic-headlines-container">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+
+        <!-- TAB 2: Cortisol & Outrage Simulator -->
+        <div id="tab-simulator" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="font-black text-base text-red-500 uppercase oswald">🎛️ Outrage Customizer</h2>
+                    <span class="text-[10px] bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Interactive Panic</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Select your preferred fear trigger below and watch our algorithmic headline generator synthesize maximum psychological distress.
+                </p>
+
+                <!-- Fear Trigger Buttons -->
+                <div class="grid grid-cols-2 gap-2" id="fear-triggers-grid">
+                    <button onclick="selectTrigger('Economy Collapse')" class="trigger-btn bg-[#0f0f0f] border-2 border-red-600 p-3 rounded-xl text-left transition hover:border-red-400">
+                        <p class="text-sm font-black uppercase oswald text-red-400">💸 Economy Collapse</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">Banks, inflation & pensions</p>
+                    </button>
+                    <button onclick="selectTrigger('AI Apocalypse')" class="trigger-btn bg-[#0f0f0f] border-2 border-[#222] p-3 rounded-xl text-left transition hover:border-red-400">
+                        <p class="text-sm font-black uppercase oswald text-yellow-400">🤖 AI Apocalypse</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">Robots taking over jobs</p>
+                    </button>
+                    <button onclick="selectTrigger('Political Armageddon')" class="trigger-btn bg-[#0f0f0f] border-2 border-[#222] p-3 rounded-xl text-left transition hover:border-red-400">
+                        <p class="text-sm font-black uppercase oswald text-purple-400">🗳️ Political Armageddon</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">End of democracy imminent</p>
+                    </button>
+                    <button onclick="selectTrigger('Killer Weather')" class="trigger-btn bg-[#0f0f0f] border-2 border-[#222] p-3 rounded-xl text-left transition hover:border-red-400">
+                        <p class="text-sm font-black uppercase oswald text-blue-400">🌪️ Killer Weather</p>
+                        <p class="text-[10px] text-gray-400 mt-0.5">Unprecedented doom storms</p>
+                    </button>
+                </div>
+
+                <!-- Generated Hyper-Escalation Headline Result -->
+                <div class="bg-[#0f0f0f] border-2 border-red-600/60 rounded-2xl p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] bg-red-600 text-white font-black px-2 py-0.5 rounded uppercase oswald">Generated Panic Output</span>
+                        <span class="text-xs font-mono text-red-400 font-bold">Cortisol Multiplier: 10x</span>
+                    </div>
+                    <p class="text-sm font-black uppercase text-gray-100 oswald tracking-wide" id="simulator-output">
+                        "ECONOMY COLLAPSE: EXPERTS CONFIRM EVERYTHING YOU OWN WILL LITERALLY DISAPPEAR BY FRIDAY MORNING!"
+                    </p>
+                    <button onclick="generateNewHeadline()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-black text-xs uppercase oswald shadow-lg transition">
+                        🔥 Amplify Outrage Even Further
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Metrics & Manipulation Dashboard -->
+        <div id="tab-dashboard" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-5 shadow-xl space-y-4">
+                <h2 class="font-black text-base text-red-500 uppercase oswald">📈 Manipulation Analytics</h2>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Cable news channels do not sell news; they sell your attention to advertisers by manufacturing artificial outrage. Here is how your biology is being monetized right now:
+                </p>
+
+                <div class="space-y-3">
+                    <div class="bg-[#0f0f0f] p-3 rounded-xl border border-[#222] flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold uppercase oswald text-gray-200">Ad Revenue Generated for CNN/Fox</p>
+                            <p class="text-[10px] text-gray-400">Based on 4 minutes of doom scrolling</p>
+                        </div>
+                        <p class="text-lg font-black text-yellow-400 oswald">$0.42</p>
+                    </div>
+                    <div class="bg-[#0f0f0f] p-3 rounded-xl border border-[#222] flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold uppercase oswald text-gray-200">Artificial Cortisol Spikes</p>
+                            <p class="text-[10px] text-gray-400">Fight-or-flight triggers activated</p>
+                        </div>
+                        <p class="text-lg font-black text-red-500 oswald">14 Spikes</p>
+                    </div>
+                    <div class="bg-[#0f0f0f] p-3 rounded-xl border border-[#222] flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold uppercase oswald text-gray-200">Actual Events You Can Control</p>
+                            <p class="text-[10px] text-gray-400">Right now in your physical room</p>
+                        </div>
+                        <p class="text-lg font-black text-emerald-400 oswald">100%</p>
+                    </div>
+                </div>
+
+                <button onclick="triggerEmergencyDetox()" class="w-full bg-gradient-to-r from-red-600 to-yellow-500 text-black py-3 rounded-xl font-black text-xs uppercase oswald shadow-xl hover:opacity-95 transition">
+                    🛑 ESCAPE THE MATRIX & DETOX NOW
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 4: Profile / Detox Stats -->
+        <div id="tab-profile" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-6 shadow-xl text-center space-y-3">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-600 to-yellow-500 text-black flex items-center justify-center mx-auto text-3xl font-black shadow-lg">
+                    🧘
+                </div>
+                <h2 class="font-black text-lg uppercase oswald">Calm Mind Explorer</h2>
+                <p class="text-xs text-emerald-400 font-bold uppercase tracking-wider">● Fully Grounded in Reality</p>
+
+                <div class="grid grid-cols-2 gap-3 pt-4 border-t border-[#222]">
+                    <div class="bg-[#0f0f0f] p-3 rounded-xl border border-[#222]">
+                        <p class="text-xs text-gray-400 font-semibold">Panics Avoided</p>
+                        <p class="text-2xl font-black text-yellow-400 oswald" id="profile-panics">48</p>
+                    </div>
+                    <div class="bg-[#0f0f0f] p-3 rounded-xl border border-[#222]">
+                        <p class="text-xs text-gray-400 font-semibold">Hours of Peace</p>
+                        <p class="text-2xl font-black text-emerald-400 oswald" id="profile-hours">12.5</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-5 shadow-xl space-y-3">
+                <h3 class="font-black text-sm uppercase oswald text-gray-300">System Controls</h3>
+                <button onclick="resetStats()" class="w-full bg-[#0f0f0f] border border-[#222] hover:bg-[#222] py-3 rounded-xl text-xs font-black uppercase oswald text-gray-300 transition">
+                    Reset Panic Statistics
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 z-40 bg-[#161616] border-t border-[#262626] w-full max-w-md py-2.5 px-6 flex justify-between items-center shadow-2xl">
+        <button onclick="switchTab('news')" id="nav-news" class="nav-btn text-red-500 p-2 flex flex-col items-center transition">
+            <span class="text-xl">📺</span>
+            <span class="text-[9px] font-black uppercase oswald mt-0.5">Panic Feed</span>
+        </button>
+        <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">🎛️</span>
+            <span class="text-[9px] font-black uppercase oswald mt-0.5">Outrage Gen</span>
+        </button>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">📊</span>
+            <span class="text-[9px] font-black uppercase oswald mt-0.5">Telemetry</span>
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">👤</span>
+            <span class="text-[9px] font-black uppercase oswald mt-0.5">Calm</span>
+        </button>
+    </nav>
+
+    <!-- Emergency Reality Check / Detox Interrupter Modal -->
+    <div id="detox-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#161616] rounded-3xl max-w-sm w-full p-6 shadow-2xl border-2 border-red-600 text-center space-y-4">
+            <div class="w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-black shadow-lg oswald pulse-slow">
+                🛑
+            </div>
+            <h3 class="font-black text-2xl uppercase oswald text-red-500">Emergency Reality Check</h3>
+            <p class="text-sm text-gray-300 leading-relaxed">
+                None of the breaking news headlines on this screen or cable news networks matter to your actual Tuesday afternoon. 
+            </p>
+            
+            <div class="bg-[#0f0f0f] border border-red-500/30 p-3.5 rounded-2xl text-left space-y-1">
+                <p class="text-xs font-black uppercase oswald text-yellow-400">🌿 Prescribed Action:</p>
+                <p class="text-xs text-gray-300">1. Drop your shoulders away from your ears.<br>2. Go drink a full glass of cold water.<br>3. Step outside and look at the sky.</p>
+            </div>
+
+            <button onclick="closeDetoxModal()" class="w-full bg-gradient-to-r from-red-600 to-yellow-500 text-black py-3 rounded-2xl font-black text-sm uppercase oswald shadow-xl hover:opacity-95 transition">
+                I'm Grounded. Return to Peace.
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let appState = {
+            panicsAvoided: 48,
+            hoursPeace: 12.5,
+            rageBpm: 138
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem('nonews_state');
+            if (saved) {
+                try { appState = JSON.parse(saved); } catch(e) {}
+            }
+            updateUI();
+        }
+
+        function saveState() {
+            localStorage.setItem('nonews_state', JSON.stringify(appState));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('header-rage-bpm').innerText = appState.rageBpm;
+            document.getElementById('profile-panics').innerText = appState.panicsAvoided;
+            document.getElementById('profile-hours').innerText = appState.hoursPeace.toFixed(1);
+            renderHeadlines();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-red-500');
+                btn.classList.add('text-gray-400');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.remove('text-gray-400');
+            activeBtn.classList.add('text-red-500');
+        }
+
+        // Alarmist News Feed
+        const alarmistHeadlines = [
+            { source: "CABLE NEWS NETWORK", title: "ALARMING NEW REPORT: YOUR DAILY ROUTINE IS ACTIVELY DESTROYING THE FUTURE OF HUMANITY AS WE KNOW IT", time: "2m ago", urgency: "CRITICAL" },
+            { source: "PANIC DAILY", title: "HOUSING MARKET ABOUT TO IMPLODE IN A FIERY APOCALYPSE SAYS EXPERT WHO WANTS YOU TO PANIC", time: "12m ago", urgency: "HIGH" },
+            { source: "THE DOOM CHRONICLE", title: "POLITICAL OPPONENTS ARE PLANNING TO BAN EVERYTHING YOU ENJOY STARTING TOMORROW MORNING", time: "25m ago", urgency: "EXTREME" },
+            { source: "GLOBAL FEAR WIRE", title: "WEATHER SCIENTISTS CONFIRM THE UPCOMING WEEKEND WILL BE EITHER TOO HOT OR TOO COLD FOR SURVIVAL", time: "41m ago", urgency: "URGENT" }
+        ];
+
+        function renderHeadlines() {
+            const container = document.getElementById('panic-headlines-container');
+            container.innerHTML = alarmistHeadlines.map(h => `
+                <div class="bg-[#161616] border border-[#2a2a2a] rounded-2xl p-4 space-y-2 hover:border-red-600/50 transition">
+                    <div class="flex justify-between items-center text-[10px]">
+                        <span class="text-red-500 font-black uppercase oswald">${h.source}</span>
+                        <span class="text-yellow-400 font-mono font-bold">${h.time} • ${h.urgency}</span>
+                    </div>
+                    <h4 class="font-black text-sm uppercase leading-snug oswald text-gray-100">${h.title}</h4>
+                    <div class="flex justify-between items-center pt-2 border-t border-[#222]">
+                        <span class="text-[10px] text-gray-400">Engagement Bait Factor: 99.8%</span>
+                        <button onclick="spikeRage()" class="text-xs text-red-400 font-black uppercase oswald hover:underline">Argue in Comments (+5 BPM)</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function spikeRage() {
+            appState.rageBpm += 5;
+            document.getElementById('header-rage-bpm').innerText = appState.rageBpm;
+            if (appState.rageBpm > 150) {
+                triggerEmergencyDetox();
+            }
+        }
+
+        // Outrage Generator Simulator
+        let currentTrigger = "Economy Collapse";
+        const simulatorTemplates = {
+            "Economy Collapse": [
+                "ECONOMY COLLAPSE: EXPERTS CONFIRM EVERYTHING YOU OWN WILL LITERALLY DISAPPEAR BY FRIDAY MORNING!",
+                "TOTAL FINANCIAL RUIN: BANKING SYSTEM HANGS BY A THREAD AFTER UNPRECEDENTED CATASTROPHE!",
+                "INFLATION SURGES 5,000%: EXPERTS ADVISE HOARDING CANNED BEANS AND GOLD BULLION IMMEDIATELY!"
+            ],
+            "AI Apocalypse": [
+                "AI APOCALYPSE: ROGUE ALGORITHMS HAVE TAKEN OVER TOASTER OVENS AND YOUR JOB IS GONE BY LUNCH!",
+                "SENTINEL ROBOTS ARE ALREADY AMONG US: WHY YOUR SMART FRIDGE IS JUDGING YOUR LIFE CHOICES!",
+                "ARTIFICIAL INTELLIGENCE RENDERS ALL HUMAN THOUGHT OBSOLETE: PANIC ACCELERATES!"
+            ],
+            "Political Armageddon": [
+                "POLITICAL ARMAGEDDON: DEMOCRACY COLLAPSES FOREVER UNLESS YOU FORWARD THIS OUTRAGEOUS STATEMENT!",
+                "ABSOLUTE CHAOTIC RUIN: BOTH SIDES AGREE THAT THE OTHER SIDE WILL RUIN THE UNIVERSE!",
+                "ELECTION PANIC OVERLOAD: EXPERTS WARN SOCIETY CANNOT SURVIVE ANOTHER TUESDAY!"
+            ],
+            "Killer Weather": [
+                "KILLER WEATHER APOCALYPSE: UNPRECEDENTED ATMOSPHERIC PHENOMENON TO VAPORIZE YOUR LAWN!",
+                "THE SKIES ARE FALLING: RECORD-BREAKING TEMPERATURES WILL MELT YOUR SHOES ON CONTACT!",
+                "MEGA-STORM OF CENTURY TO OBLITERATE SUBURBIA: EVACUATE TO YOUR BASEMENT FOREVER!"
+            ]
+        };
+
+        function selectTrigger(triggerName) {
+            currentTrigger = triggerName;
+            document.querySelectorAll('.trigger-btn').forEach(btn => {
+                btn.classList.remove('border-red-600');
+                btn.classList.add('border-[#222]');
+            });
+            event.currentTarget.classList.remove('border-[#222]');
+            event.currentTarget.classList.add('border-red-600');
+            generateNewHeadline();
+        }
+
+        function generateNewHeadline() {
+            const list = simulatorTemplates[currentTrigger];
+            const randomMsg = list[Math.floor(Math.random() * list.length)];
+            document.getElementById('simulator-output').innerText = `"${randomMsg}"`;
+            spikeRage();
+        }
+
+        function triggerEmergencyDetox() {
+            document.getElementById('detox-modal').classList.remove('hidden');
+        }
+
+        function closeDetoxModal() {
+            document.getElementById('detox-modal').classList.add('hidden');
+            appState.panicsAvoided += 1;
+            appState.hoursPeace += 0.5;
+            appState.rageBpm = 110;
+            saveState();
+        }
+
+        function resetStats() {
+            appState.panicsAvoided = 1;
+            appState.hoursPeace = 0.5;
+            appState.rageBpm = 110;
+            saveState();
+            alert("Panic statistics reset to baseline calm.");
+        }
+
+        window.onload = function() {
+            loadState();
+        };
+    </script>
+</body>
+</html>
