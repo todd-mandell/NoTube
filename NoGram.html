@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoGram - Mindful Visual Detox</title>
+    <style>
+        *, ::before, ::after { box-sizing: border-box; border-width: 0; border-style: solid; border-color: #dbdbdb; }
+        html { line-height: 1.5; -webkit-text-size-adjust: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { margin: 0; background-color: #fafafa; color: #262626; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+        .dark body { background-color: #000000; color: #f5f5f5; }
+
+        /* Color Utilities */
+        .bg-ig-bg { background-color: #fafafa; }
+        .dark .bg-ig-bg { background-color: #000000; }
+        .bg-ig-card { background-color: #ffffff; }
+        .dark .bg-ig-card { background-color: #121212; }
+        .text-ig-text { color: #262626; }
+        .dark .text-ig-text { color: #f5f5f5; }
+        .text-ig-muted { color: #737373; }
+        .dark .text-ig-muted { color: #a8a8a8; }
+        .border-ig { border-color: #dbdbdb; }
+        .dark .border-ig { border-color: #262626; }
+        .ig-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+
+        /* Layout Utilities */
+        .flex { display: flex; }
+        .hidden { display: none; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-col { flex-direction: column; }
+        .flex-1 { flex: 1 1 0%; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+
+        .w-full { width: 100%; }
+        .max-w-md { max-width: 28rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+
+        .rounded-full { border-radius: 9999px; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .border { border-width: 1px; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-center { text-align: center; }
+
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-50 { z-index: 50; }
+        .cursor-pointer { cursor: pointer; }
+        .transition { transition: all 0.2s ease; }
+
+        /* Custom Animations */
+        .mindful-pulse { animation: pulseGlow 4s infinite ease-in-out; }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.99); opacity: 0.95; }
+        }
+    </style>
+</head>
+<body class="bg-ig-bg text-ig-text transition-colors duration-200">
+
+    <header class="sticky top-0 z-50 bg-ig-card border-b border-ig w-full max-w-md px-4 py-3 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-xl ig-gradient flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                n
+            </div>
+            <h1 class="font-bold text-xl tracking-tight">NoGram</h1>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="openQuotaModal()" class="text-xs bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-300 px-2.5 py-1.5 rounded-full font-bold">
+                Quota: <span id="header-quota-left">20</span> left
+            </button>
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-ig-muted hover:opacity-80 transition" title="Toggle Theme">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <!-- Main App Container (Mobile Proportion) -->
+    <main class="w-full max-w-md flex-1 pb-20 flex flex-col">
+
+        <!-- TAB 1: Mindful Feed -->
+        <div id="tab-feed" class="tab-content flex-1 space-y-4 p-3">
+            
+            <!-- Stories -> Reflections Bar -->
+            <div class="bg-ig-card border border-ig rounded-2xl p-3 shadow-sm">
+                <p class="text-xs font-bold text-ig-muted mb-2 uppercase tracking-wider">Daily Reflections (Instead of Stories)</p>
+                <div class="flex space-x-3 overflow-x-auto pb-1" id="reflections-stories-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Scroll Quota Tracker Banner -->
+            <div class="bg-ig-card border border-ig rounded-2xl p-4 shadow-sm mindful-pulse">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-bold text-ig-muted">SCROLL BUDGET REMAINING</span>
+                    <span class="text-xs font-bold text-pink-600" id="quota-status-text">20 / 20 posts</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="quota-bar-fill" class="ig-gradient h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+                </div>
+                <p class="text-[11px] text-ig-muted mt-2">Every post viewed consumes your limited attention quota for the day.</p>
+            </div>
+
+            <!-- Feed Stream -->
+            <div id="feed-posts-container" class="space-y-4">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <!-- TAB 2: Reality Check / Reels Alternative -->
+        <div id="tab-reels" class="tab-content hidden flex-1 space-y-4 p-3">
+            <div class="bg-ig-card border border-ig rounded-2xl p-6 shadow-sm text-center">
+                <div class="w-16 h-16 ig-gradient text-white rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold shadow-md">🧘</div>
+                <h2 class="text-xl font-bold mb-2">Reality Check Simulator</h2>
+                <p class="text-sm text-ig-muted mb-6">Instagram Reels use infinite variable rewards to hijack dopamine. NoGram replaces brain rot with wisdom and analog inspiration.</p>
+                
+                <div id="reality-check-card" class="bg-gray-50 dark:bg-gray-900 p-5 rounded-2xl border border-ig mb-6 text-left space-y-2">
+                    <span class="text-xs font-bold text-pink-600 uppercase" id="rc-category">Attention Economics</span>
+                    <h3 class="font-bold text-base" id="rc-title">Your Attention Is Your Life</h3>
+                    <p class="text-sm text-ig-muted" id="rc-body">"What you pay attention to becomes your reality. When you spend 2 hours scrolling reels, you are trading irreplaceable hours of your life for synthetic validation."</p>
+                </div>
+
+                <button onclick="loadNextRealityCheck()" class="w-full ig-gradient text-white py-3 rounded-xl font-semibold shadow-md hover:opacity-95 transition">
+                    Draw Another Insight
+                </button>
+            </div>
+
+            <!-- Photography Prompt (Create, don't consume) -->
+            <div class="bg-ig-card border border-ig rounded-2xl p-5 shadow-sm">
+                <h3 class="font-bold text-sm mb-2 flex items-center space-x-2">
+                    <span>📸 Analog Photography Challenge</span>
+                </h3>
+                <p class="text-xs text-ig-muted mb-3">Instead of looking at other people's photos, take one real picture of your immediate physical environment today.</p>
+                <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-ig text-xs font-medium" id="photo-prompt-text">
+                    "Capture a close-up of a texture in your room or kitchen using natural window light."
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Explore / Compassion Hub -->
+        <div id="tab-explore" class="tab-content hidden flex-1 space-y-4 p-3">
+            <div class="bg-ig-card border border-ig rounded-2xl p-5 shadow-sm">
+                <h2 class="font-bold text-lg mb-1">Mindful Compassion Hub</h2>
+                <p class="text-xs text-ig-muted mb-4">Replace social comparison with community contribution.</p>
+                
+                <div class="space-y-3" id="compassion-actions-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="bg-ig-card border border-ig rounded-2xl p-5 shadow-sm">
+                <h3 class="font-bold text-sm mb-3">Your Anti-Addiction Stats</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-ig">
+                        <p class="text-xs text-ig-muted font-medium">Hours Reclaimed</p>
+                        <p class="text-2xl font-bold text-pink-600" id="stat-hours">4.2</p>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-900 p-3 rounded-xl border border-ig">
+                        <p class="text-xs text-ig-muted font-medium">Urges Resisted</p>
+                        <p class="text-2xl font-bold text-emerald-600" id="stat-urges">24</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: Profile & Detox Journey -->
+        <div id="tab-profile" class="tab-content hidden flex-1 space-y-4 p-3">
+            <div class="bg-ig-card border border-ig rounded-2xl p-6 shadow-sm text-center">
+                <div class="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center mx-auto mb-3 font-bold text-2xl text-ig-muted">
+                    🌱
+                </div>
+                <h2 class="font-bold text-lg">Mindful Explorer</h2>
+                <p class="text-xs text-emerald-600 font-medium mt-0.5">● Present in the Real World</p>
+
+                <div class="mt-6 pt-6 border-t border-ig flex justify-around">
+                    <div>
+                        <p class="text-xl font-bold" id="profile-streak">5</p>
+                        <p class="text-xs text-ig-muted">Day Streak</p>
+                    </div>
+                    <div>
+                        <p class="text-xl font-bold" id="profile-likes-blocked">182</p>
+                        <p class="text-xs text-ig-muted">Vanity Likes Avoided</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-ig-card border border-ig rounded-2xl p-5 shadow-sm space-y-3">
+                <h3 class="font-bold text-sm">Reset Settings</h3>
+                <button onclick="resetDailyQuota()" class="w-full bg-gray-100 dark:bg-gray-800 hover:opacity-80 py-2.5 rounded-xl text-xs font-semibold transition">
+                    Reset Daily Scroll Quota
+                </button>
+                <button onclick="triggerGroundingExercise()" class="w-full ig-gradient text-white py-2.5 rounded-xl text-xs font-semibold shadow transition">
+                    🌳 Take a 2-Minute Nature Pause
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 z-50 bg-ig-card border-t border-ig w-full max-w-md py-2 px-6 flex justify-between items-center shadow-lg">
+        <button onclick="switchTab('feed')" id="nav-feed" class="nav-btn text-pink-600 p-2 flex flex-col items-center transition">
+            <span class="text-xl">🏠</span>
+            <span class="text-[10px] font-semibold mt-0.5">Feed</span>
+        </button>
+        <button onclick="switchTab('reels')" id="nav-reels" class="nav-btn text-ig-muted p-2 flex flex-col items-center transition">
+            <span class="text-xl">🧘</span>
+            <span class="text-[10px] font-semibold mt-0.5">Reels Shift</span>
+        </button>
+        <button onclick="switchTab('explore')" id="nav-explore" class="nav-btn text-ig-muted p-2 flex flex-col items-center transition">
+            <span class="text-xl">🤝</span>
+            <span class="text-[10px] font-semibold mt-0.5">Compassion</span>
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn text-ig-muted p-2 flex flex-col items-center transition">
+            <span class="text-xl">🌱</span>
+            <span class="text-[10px] font-semibold mt-0.5">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Friction Modal / Like Intention Check -->
+    <div id="friction-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-ig-card rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-ig text-center space-y-4">
+            <div class="w-12 h-12 bg-pink-100 dark:bg-pink-950 text-pink-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">❓</div>
+            <h3 class="font-bold text-lg">Pause & Reflect</h3>
+            <p class="text-xs text-ig-muted" id="friction-prompt-text">Why are you liking or commenting on this post? Does it truly enrich your life or is it automatic habit?</p>
+            <div class="space-y-2 pt-2">
+                <button onclick="confirmEngagement()" class="w-full ig-gradient text-white py-2.5 rounded-xl text-xs font-semibold shadow">Yes, this is genuinely meaningful</button>
+                <button onclick="cancelEngagement()" class="w-full bg-gray-100 dark:bg-gray-800 py-2.5 rounded-xl text-xs font-semibold hover:opacity-80">Close & Save Attention</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quota Exhausted Modal -->
+    <div id="quota-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-ig-card rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-ig text-center space-y-4">
+            <div class="w-16 h-16 bg-red-100 dark:bg-red-950 text-red-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">⏰</div>
+            <h3 class="font-bold text-xl">Daily Scroll Budget Reached</h3>
+            <p class="text-sm text-ig-muted">You have consumed your 20 mindful posts for today. Your brain needs offline recovery time.</p>
+            <button onclick="closeQuotaModal()" class="w-full ig-gradient text-white py-3 rounded-xl text-sm font-semibold shadow">Step Away and Touch Grass</button>
+        </div>
+    </div>
+
+    <script>
+        let appState = {
+            quota: 20,
+            maxQuota: 20,
+            hoursReclaimed: 4.2,
+            urgesResisted: 24,
+            streak: 5,
+            likesAvoided: 182,
+            darkMode: false
+        };
+
+        function loadAppState() {
+            const saved = localStorage.getItem('nogram_state');
+            if (saved) {
+                try { appState = JSON.parse(saved); } catch(e) {}
+            }
+            if (appState.darkMode) {
+                document.documentElement.classList.add('dark');
+            }
+            updateUI();
+        }
+
+        function saveAppState() {
+            localStorage.setItem('nogram_state', JSON.stringify(appState));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('header-quota-left').innerText = appState.quota;
+            document.getElementById('quota-status-text').innerText = `${appState.quota} / ${appState.maxQuota} posts`;
+            const pct = (appState.quota / appState.maxQuota) * 100;
+            document.getElementById('quota-bar-fill').style.width = `${pct}%`;
+
+            document.getElementById('stat-hours').innerText = appState.hoursReclaimed.toFixed(1);
+            document.getElementById('stat-urges').innerText = appState.urgesResisted;
+            document.getElementById('profile-streak').innerText = appState.streak;
+            document.getElementById('profile-likes-blocked').innerText = appState.likesAvoided;
+
+            if (appState.quota <= 0) {
+                document.getElementById('quota-modal').classList.remove('hidden');
+            }
+        }
+
+        function toggleDarkMode() {
+            appState.darkMode = !appState.darkMode;
+            document.documentElement.classList.toggle('dark', appState.darkMode);
+            saveAppState();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-pink-600');
+                btn.classList.add('text-ig-muted');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.remove('text-ig-muted');
+            activeBtn.classList.add('text-pink-600');
+        }
+
+        const reflectionsStories = [
+            { name: "Gratitude", icon: "🌸", desc: "List 3 simple things you appreciate right now." },
+            { name: "Breathing", icon: "🫁", desc: "Take 3 deep abdominal breaths." },
+            { name: "Real Goal", icon: "🎯", desc: "What offline task will you finish today?" },
+            { name: "Stretching", icon: "🧘", desc: "Roll your shoulders and release tension." }
+        ];
+
+        function renderReflections() {
+            const container = document.getElementById('reflections-stories-container');
+            container.innerHTML = reflectionsStories.map((s, idx) => `
+                <div onclick="openStoryModal('${s.name}', '${s.desc}')" class="flex flex-col items-center cursor-pointer space-y-1 flex-shrink-0">
+                    <div class="w-14 h-14 rounded-full ig-gradient p-0.5 flex items-center justify-center">
+                        <div class="w-full h-full bg-ig-card rounded-full flex items-center justify-center text-xl">
+                            ${s.icon}
+                        </div>
+                    </div>
+                    <span class="text-[11px] font-medium text-ig-text">${s.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function openStoryModal(title, desc) {
+            alert(`Reflection Prompt (${title}):\n\n${desc}\n\nTake 1 minute to reflect in silence instead of consuming media.`);
+            appState.urgesResisted += 1;
+            saveAppState();
+        }
+
+        const feedPosts = [
+            {
+                author: "Mindful Living Club",
+                location: "Present Moment",
+                content: "Instead of comparing your behind-the-scenes to everyone else's highlight reel, celebrate your quiet, steady progress today.",
+                type: "wisdom"
+            },
+            {
+                author: "Digital Minimalism",
+                location: "Analog World",
+                content: "Challenge: Leave your phone in another room for 60 minutes this evening and notice how calm your nervous system feels.",
+                type: "challenge"
+            },
+            {
+                author: "Nature's Rhythm",
+                location: "Outside Window",
+                content: "Notice the quality of light entering your room right now. Observe its shadow and warmth without grabbing your device.",
+                type: "observation"
+            }
+        ];
+
+        function renderFeed() {
+            const container = document.getElementById('feed-posts-container');
+            container.innerHTML = feedPosts.map((p, idx) => `
+                <div class="bg-ig-card border border-ig rounded-2xl p-4 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xs font-bold">
+                                ${p.author.charAt(0)}
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold">${p.author}</p>
+                                <p class="text-[10px] text-ig-muted">${p.location}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-ig-muted">Post #${idx + 1}</span>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-ig">
+                        <p class="text-sm font-medium leading-relaxed">${p.content}</p>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <div class="flex space-x-4">
+                            <button onclick="triggerFriction()" class="text-xl hover:scale-110 transition">❤️</button>
+                            <button onclick="triggerFriction()" class="text-xl hover:scale-110 transition">💬</button>
+                            <button onclick="shareMindfulThought()" class="text-xl hover:scale-110 transition">📤</button>
+                        </div>
+                        <button onclick="consumePostQuota()" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg font-semibold hover:opacity-80 transition">
+                            Mark Read (-1 Quota)
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function consumePostQuota() {
+            if (appState.quota > 0) {
+                appState.quota -= 1;
+                appState.hoursReclaimed += 0.1;
+                saveAppState();
+            }
+            if (appState.quota <= 0) {
+                document.getElementById('quota-modal').classList.remove('hidden');
+            }
+        }
+
+        let pendingEngagementAction = null;
+
+        function triggerFriction() {
+            document.getElementById('friction-modal').classList.remove('hidden');
+        }
+
+        function confirmEngagement() {
+            document.getElementById('friction-modal').classList.add('hidden');
+            appState.likesAvoided += 1;
+            saveAppState();
+            alert("Intention verified. Remember to spend your attention mindfully!");
+        }
+
+        function cancelEngagement() {
+            document.getElementById('friction-modal').classList.add('hidden');
+            appState.likesAvoided += 5;
+            appState.urgesResisted += 1;
+            saveAppState();
+            alert("Good choice! Automated double-tap avoided.");
+        }
+
+        const realityCheckInsights = [
+            { category: "Attention Economics", title: "Variable Reward Schedules", body: "Slot machines and social media feeds use the exact same psychological mechanism: unpredictable rewards keep you hooked." },
+            { category: "Neuroscience", title: "Dopamine Fasting", body: "Constant micro-stimulations dull your baseline dopamine response, making everyday quiet tasks feel boring. Rest is healing." },
+            { category: "Real Connection", title: "Depth Over Breadth", body: "Having 3 deep offline friendships yields higher life satisfaction than 3,000 digital followers." }
+        ];
+
+        let rcIndex = 0;
+        function loadNextRealityCheck() {
+            rcIndex = (rcIndex + 1) % realityCheckInsights.length;
+            const item = realityCheckInsights[rcIndex];
+            document.getElementById('rc-category').innerText = item.category;
+            document.getElementById('rc-title').innerText = item.title;
+            document.getElementById('rc-body').innerText = `"${item.body}"`;
+            appState.urgesResisted += 1;
+            saveAppState();
+        }
+
+        const compassionActions = [
+            { title: "Send an unsolicited thank-you note", desc: "Text or call someone who helped you in the past year." },
+            { title: "Do a random act of kindness", desc: "Help a neighbor, family member, or colleague without posting about it." },
+            { title: "Practice active listening", desc: "Have a 10-minute conversation with someone today without checking your phone once." }
+        ];
+
+        function renderCompassionHub() {
+            const container = document.getElementById('compassion-actions-list');
+            container.innerHTML = compassionActions.map(c => `
+                <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-900 border border-ig flex items-start space-x-3">
+                    <span class="text-xl">🤝</span>
+                    <div>
+                        <h4 class="font-bold text-xs text-pink-600">${c.title}</h4>
+                        <p class="text-[11px] text-ig-muted mt-0.5">${c.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetDailyQuota() {
+            appState.quota = appState.maxQuota;
+            saveAppState();
+            alert("Daily scroll quota reset. Use your attention wisely today!");
+        }
+
+        function closeQuotaModal() {
+            document.getElementById('quota-modal').classList.add('hidden');
+        }
+
+        function triggerGroundingExercise() {
+            alert("Grounding Exercise:\n\n1. Name 4 things you can see.\n2. Name 3 things you can touch.\n3. Name 2 things you can hear.\n4. Name 1 thing you can taste.\n\nYou are grounded in reality.");
+        }
+
+        function shareMindfulThought() {
+            alert("Saved to your personal offline journal!");
+        }
+
+        // Initialization
+        window.onload = function() {
+            loadAppState();
+            renderReflections();
+            renderFeed();
+            renderCompassionHub();
+        };
+    </script>
+</body>
+</html>
