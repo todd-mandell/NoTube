@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoChat - Mindful Anti-Snapchat Detox</title>
+    <!-- Tailwind CSS CDN for polished visuals -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        snap: {
+                            yellow: '#FFFC00',
+                            dark: '#0f0f0f',
+                            card: '#1a1a1a',
+                            border: '#2a2a2a',
+                            muted: '#8e8e93'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .snap-gradient { background: linear-gradient(135deg, #FFFC00 0%, #ffcc00 100%); }
+        .phantom-fade { animation: fadeOutSlow 8s forwards ease-in-out; }
+        @keyframes fadeOutSlow {
+            0% { opacity: 1; transform: scale(1); }
+            70% { opacity: 0.9; transform: scale(1); }
+            100% { opacity: 0.1; filter: blur(4px); pointer-events: none; }
+        }
+        .pulse-slow { animation: pulseGlow 4s infinite ease-in-out; }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.98); opacity: 0.9; }
+        }
+    </style>
+</head>
+<body class="bg-[#121212] text-white min-h-screen flex flex-col items-center select-none">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-[#121212]/90 backdrop-blur border-b border-[#222] w-full max-w-md px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <div class="w-9 h-9 rounded-2xl bg-[#FFFC00] text-black font-extrabold flex items-center justify-center text-lg shadow-lg">
+                n
+            </div>
+            <div>
+                <h1 class="font-extrabold text-base tracking-tight text-[#FFFC00]">NoChat</h1>
+                <p class="text-[10px] text-gray-400">Break Streak Anxiety</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+            <button onclick="openFreedomModal()" class="text-xs bg-yellow-500/10 text-[#FFFC00] border border-yellow-500/30 px-3 py-1.5 rounded-full font-bold flex items-center space-x-1">
+                <span>🔥 <span id="header-freedom-streak">12</span> Days Free</span>
+            </button>
+            <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-[#1e1e1e] text-gray-300 hover:bg-[#2a2a2a] transition" title="Theme">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container (Mobile Proportion) -->
+    <main class="w-full max-w-md flex-1 pb-24 flex flex-col p-3 space-y-4">
+
+        <!-- TAB 1: Phantom Snaps (Disappearing Wisdom instead of FOMO) -->
+        <div id="tab-snaps" class="tab-content flex-1 space-y-4">
+            <div class="bg-gradient-to-br from-yellow-400/20 to-yellow-600/10 border border-yellow-400/30 rounded-3xl p-5 shadow-xl text-center relative overflow-hidden">
+                <div class="absolute top-3 right-3">
+                    <span class="text-[10px] uppercase tracking-wider bg-yellow-400 text-black px-2 py-0.5 rounded-full font-extrabold">Phantom Snap</span>
+                </div>
+                
+                <div class="w-16 h-16 bg-[#FFFC00] text-black rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-md">
+                    👻
+                </div>
+                
+                <h2 class="text-lg font-bold mb-1 text-yellow-300">Disappearing Anxiety</h2>
+                <p class="text-xs text-gray-300 mb-4">Snapchat creates urgency through ephemeral messages. Here, messages fade into <span class="text-yellow-300 font-semibold">mindful presence</span>.</p>
+
+                <!-- Phantom Snap Card that fades out -->
+                <div id="phantom-card" class="bg-[#1a1a1a] border border-[#333] rounded-2xl p-5 shadow-inner text-left space-y-3 relative">
+                    <div class="flex justify-between items-center text-xs text-gray-400">
+                        <span id="snap-sender">From: Your Future Self</span>
+                        <span id="snap-timer" class="text-yellow-400 font-mono">8s remaining</span>
+                    </div>
+                    <p class="text-sm font-medium leading-relaxed text-gray-100 italic" id="snap-message">
+                        "Look up from your screen right now. Name 3 things in your physical room that bring you peace. You are missing nothing online."
+                    </p>
+                    <div class="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                        <div id="snap-progress" class="bg-[#FFFC00] h-full w-full transition-all duration-1000"></div>
+                    </div>
+                </div>
+
+                <button onclick="loadNextPhantomSnap()" class="mt-4 w-full bg-[#FFFC00] hover:bg-yellow-300 text-black py-3 rounded-2xl font-extrabold text-sm shadow-lg transition">
+                    Open Another Phantom Snap
+                </button>
+            </div>
+
+            <!-- Streak Killer Mini Widget -->
+            <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-5 shadow-lg space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-sm">🔥 Artificial Streak Smasher</h3>
+                    <span class="text-xs bg-red-500/20 text-red-400 px-2.5 py-1 rounded-full font-bold">Detox Active</span>
+                </div>
+                <p class="text-xs text-gray-400">Snapstreaks are psychological chains designed to force daily check-ins. Smash your fake streaks here and feel the immense relief of freedom.</p>
+                
+                <div class="space-y-2" id="fake-streaks-list">
+                    <!-- Populated via JS -->
+                </div>
+
+                <button onclick="addFakeStreak()" class="w-full bg-[#2a2a2a] hover:bg-[#333] text-yellow-300 py-2.5 rounded-2xl text-xs font-bold transition">
+                    + Add & Kill Another Fake Streak
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 2: Map of Nowhere (Replacing Zenly / Snap Map) -->
+        <div id="tab-map" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-5 shadow-lg text-center space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-bold text-base text-yellow-300">🗺️ The Map of Nowhere</h2>
+                    <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-bold">Offline Reality</span>
+                </div>
+                <p class="text-xs text-gray-400">Snap Map tracks your friends in real-time, inducing hyper-vigilance and FOMO. Replace digital stalking with local offline awareness.</p>
+
+                <!-- Static peaceful grid representing local neighborhood -->
+                <div id="peaceful-map-grid" class="grid grid-cols-3 gap-3 p-4 bg-[#121212] rounded-2xl border border-[#2a2a2a] min-h-[220px] items-center justify-center">
+                    <!-- Populated via JS -->
+                </div>
+
+                <div class="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-2xl text-left">
+                    <p class="text-xs font-bold text-yellow-300">🌱 Your Current Coordinates:</p>
+                    <p class="text-xs text-gray-300 mt-0.5" id="current-location-text">Present Moment, Safe in Your Room</p>
+                </div>
+
+                <button onclick="triggerTouchGrass()" class="w-full bg-[#FFFC00] hover:bg-yellow-300 text-black py-3 rounded-2xl font-extrabold text-sm shadow-lg transition">
+                    🌳 Go Touch Grass (Step Outside)
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 3: Spotlights / Brain Rot Shield -->
+        <div id="tab-spotlight" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-5 shadow-lg space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="font-bold text-base text-yellow-300">✨ Spotlight Shield</h2>
+                    <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2.5 py-1 rounded-full font-bold">Zero Algorithm</span>
+                </div>
+                <p class="text-xs text-gray-400">Snapchat Spotlight feeds your brain endless hyper-fast clips. NoChat replaces viral brain rot with profound human wisdom.</p>
+
+                <div class="space-y-3" id="spotlight-wisdom-list">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: Profile & Freedom Tracker -->
+        <div id="tab-profile" class="tab-content hidden flex-1 space-y-4">
+            <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-6 shadow-lg text-center space-y-3">
+                <div class="w-20 h-20 rounded-full bg-[#FFFC00] text-black flex items-center justify-center mx-auto text-3xl font-extrabold shadow-lg pulse-slow">
+                    🛡️
+                </div>
+                <h2 class="font-bold text-lg">Mindful Explorer</h2>
+                <p class="text-xs text-emerald-400 font-medium">● Free From Streak Slavery</p>
+
+                <div class="grid grid-cols-2 gap-3 pt-4 border-t border-[#2a2a2a]">
+                    <div class="bg-[#121212] p-3 rounded-2xl border border-[#2a2a2a]">
+                        <p class="text-xs text-gray-400 font-medium">Freedom Streak</p>
+                        <p class="text-2xl font-extrabold text-[#FFFC00]" id="profile-freedom-days">12</p>
+                    </div>
+                    <div class="bg-[#121212] p-3 rounded-2xl border border-[#2a2a2a]">
+                        <p class="text-xs text-gray-400 font-medium">Streaks Smashed</p>
+                        <p class="text-2xl font-extrabold text-red-400" id="profile-streaks-killed">45</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#1a1a1a] border border-[#2a2a2a] rounded-3xl p-5 shadow-lg space-y-3">
+                <h3 class="font-bold text-sm">Detox Controls</h3>
+                <button onclick="resetStats()" class="w-full bg-[#121212] border border-[#2a2a2a] hover:bg-[#2a2a2a] py-3 rounded-2xl text-xs font-bold text-gray-300 transition">
+                    Reset Freedom Stats
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 z-50 bg-[#1a1a1a] border-t border-[#2a2a2a] w-full max-w-md py-2.5 px-6 flex justify-between items-center shadow-2xl">
+        <button onclick="switchTab('snaps')" id="nav-snaps" class="nav-btn text-[#FFFC00] p-2 flex flex-col items-center transition">
+            <span class="text-xl">👻</span>
+            <span class="text-[10px] font-bold mt-0.5">Snaps</span>
+        </button>
+        <button onclick="switchTab('map')" id="nav-map" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">🗺️</span>
+            <span class="text-[10px] font-semibold mt-0.5">Map</span>
+        </button>
+        <button onclick="switchTab('spotlight')" id="nav-spotlight" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">✨</span>
+            <span class="text-[10px] font-semibold mt-0.5">Spotlight</span>
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn text-gray-400 p-2 flex flex-col items-center transition">
+            <span class="text-xl">👤</span>
+            <span class="text-[10px] font-semibold mt-0.5">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Freedom Celebration Modal -->
+    <div id="freedom-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#1a1a1a] rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-[#333] text-center space-y-4">
+            <div class="w-16 h-16 bg-[#FFFC00] text-black rounded-full flex items-center justify-center mx-auto text-2xl font-extrabold shadow-lg">🔥</div>
+            <h3 class="font-extrabold text-xl text-yellow-300">Streak Freedom Achieved!</h3>
+            <p class="text-sm text-gray-300">You are <span id="modal-days-text" class="font-bold text-[#FFFC00]">12</span> days free from artificial daily check-in anxiety. Your attention belongs to you.</p>
+            <button onclick="closeFreedomModal()" class="w-full bg-[#FFFC00] hover:bg-yellow-300 text-black py-3 rounded-2xl font-extrabold text-sm shadow-lg">Celebrate & Return</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let appState = {
+            freedomDays: 12,
+            streaksKilled: 45,
+            streaks: [
+                { name: "Alex (🔥 342 days)", status: "Active Chain (Anxiety Trigger)" },
+                { name: "Jordan (🔥 180 days)", status: "Active Chain (FOMO Trap)" },
+                { name: "Taylor (🔥 94 days)", status: "Active Chain (Obligation)" }
+            ]
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem('nochat_state');
+            if (saved) {
+                try { appState = JSON.parse(saved); } catch(e) {}
+            }
+            updateUI();
+        }
+
+        function saveState() {
+            localStorage.setItem('nochat_state', JSON.stringify(appState));
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('header-freedom-streak').innerText = appState.freedomDays;
+            document.getElementById('profile-freedom-days').innerText = appState.freedomDays;
+            document.getElementById('profile-streaks-killed').innerText = appState.streaksKilled;
+            renderStreaks();
+            renderMapGrid();
+            renderSpotlight();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-[#FFFC00]');
+                btn.classList.add('text-gray-400');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.remove('text-gray-400');
+            activeBtn.classList.add('text-[#FFFC00]');
+        }
+
+        // Phantom Snaps Logic
+        const phantomMessages = [
+            "\"Look up from your screen right now. Name 3 things in your physical room that bring you peace. You are missing nothing online.\"",
+            "\"Social media algorithms feed on your fear of missing out. The real life is happening right where your feet are standing.\"",
+            "\"A 300-day streak with an acquaintance is just a digital chain. Real friendship survives weeks of silence without anxiety.\"",
+            "\"Take one deep, slow abdominal breath. Notice how much lighter your mind feels when you stop checking notifications.\""
+        ];
+
+        let currentSnapIdx = 0;
+        let snapTimerInterval = null;
+
+        function loadNextPhantomSnap() {
+            currentSnapIdx = (currentSnapIdx + 1) % phantomMessages.length;
+            document.getElementById('snap-message').innerText = phantomMessages[currentSnapIdx];
+            
+            const card = document.getElementById('phantom-card');
+            card.classList.remove('phantom-fade');
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('phantom-fade');
+
+            startSnapCountdown();
+        }
+
+        function startSnapCountdown() {
+            let timeLeft = 8;
+            const timerEl = document.getElementById('snap-timer');
+            const progEl = document.getElementById('snap-progress');
+            
+            if (snapTimerInterval) clearInterval(snapTimerInterval);
+
+            snapTimerInterval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = `${timeLeft}s remaining`;
+                progEl.style.width = `${(timeLeft / 8) * 100}%`;
+                if (timeLeft <= 0) {
+                    clearInterval(snapTimerInterval);
+                    timerEl.innerText = "Dissolved into peace ✨";
+                }
+            }, 1000);
+        }
+
+        // Streak Smasher
+        function renderStreaks() {
+            const container = document.getElementById('fake-streaks-list');
+            if (appState.streaks.length === 0) {
+                container.innerHTML = `<p class="text-xs text-emerald-400 text-center py-2 font-semibold">✨ All artificial streaks successfully smashed! Absolute freedom.</p>`;
+                return;
+            }
+            container.innerHTML = appState.streaks.map((s, idx) => `
+                <div class="flex items-center justify-between bg-[#121212] p-3 rounded-2xl border border-[#2a2a2a]">
+                    <div>
+                        <p class="text-xs font-bold text-gray-200">${s.name}</p>
+                        <p class="text-[10px] text-red-400">${s.status}</p>
+                    </div>
+                    <button onclick="killStreak(${idx})" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-red-500/30 transition">
+                        Smash Chain 🔨
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function killStreak(idx) {
+            appState.streaks.splice(idx, 1);
+            appState.streaksKilled += 1;
+            appState.freedomDays += 1;
+            saveState();
+        }
+
+        function addFakeStreak() {
+            const names = ["Jordan", "Sam", "Chris", "Morgan", "Casey", "Riley"];
+            const randName = names[Math.floor(Math.random() * names.length)];
+            const randDays = Math.floor(Math.random() * 300) + 50;
+            appState.streaks.push({ name: `${randName} (🔥 ${randDays} days)`, status: "Active Chain (Anxiety Trigger)" });
+            saveState();
+        }
+
+        // Map of Nowhere
+        const mapLandmarks = [
+            { icon: "🌳", title: "Local Park", desc: "Fresh air & trees" },
+            { icon: "☕", title: "Corner Cafe", desc: "Warm tea & quiet" },
+            { icon: "📖", title: "Quiet Bench", desc: "No notifications" },
+            { icon: "🏠", title: "Your Room", desc: "Safe sanctuary" },
+            { icon: "🚶", title: "Walking Path", desc: "Step outside" },
+            { icon: "☁️", title: "The Sky", desc: "Infinite calm" }
+        ];
+
+        function renderMapGrid() {
+            const container = document.getElementById('peaceful-map-grid');
+            container.innerHTML = mapLandmarks.map(m => `
+                <div class="bg-[#1a1a1a] p-3 rounded-2xl border border-[#2a2a2a] text-center flex flex-col items-center justify-center space-y-1 hover:border-yellow-400/50 transition">
+                    <span class="text-2xl">${m.icon}</span>
+                    <p class="text-[11px] font-bold text-gray-200">${m.title}</p>
+                    <p class="text-[9px] text-gray-400">${m.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function triggerTouchGrass() {
+            alert("🌿 Grounding Mission:\n\nStep outside for 5 minutes without your phone. Notice the wind, the sky, and the physical earth beneath your shoes.");
+        }
+
+        // Spotlight Wisdom
+        const spotlightWisdoms = [
+            { title: "The Illusion of Urgency", desc: "Snapchat stories and spotlights are engineered to make you feel like you're missing out. In reality, stepping away reveals how peaceful silence is." },
+            { title: "Depth vs. Ephemerality", desc: "Content that vanishes in 24 hours teaches your brain to value impermanent noise over lasting human wisdom." },
+            { title: "Reclaiming Your Evenings", desc: "Replacing 30 minutes of pre-sleep swiping with reading or quiet reflection dramatically improves sleep quality and mental clarity." }
+        ];
+
+        function renderSpotlight() {
+            const container = document.getElementById('spotlight-wisdom-list');
+            container.innerHTML = spotlightWisdoms.map(w => `
+                <div class="bg-[#121212] p-4 rounded-2xl border border-[#2a2a2a] space-y-2">
+                    <h4 class="font-bold text-sm text-yellow-300">${w.title}</h4>
+                    <p class="text-xs text-gray-300 leading-relaxed">${w.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function openFreedomModal() {
+            document.getElementById('modal-days-text').innerText = appState.freedomDays;
+            document.getElementById('freedom-modal').classList.remove('hidden');
+        }
+
+        function closeFreedomModal() {
+            document.getElementById('freedom-modal').classList.add('hidden');
+        }
+
+        function resetStats() {
+            appState.freedomDays = 1;
+            appState.streaksKilled = 0;
+            saveState();
+            alert("Stats reset.");
+        }
+
+        function toggleDarkMode() {
+            // Theme toggle stub
+            alert("NoChat is locked in ultra-focus dark mode for optimal digital detox.");
+        }
+
+        window.onload = function() {
+            loadState();
+            startSnapCountdown();
+        };
+    </script>
+</body>
+</html>
